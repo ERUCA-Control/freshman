@@ -2,56 +2,29 @@
 
 > SKY의 K는 국민대
 
-**GitHub 저장소:** `a`
+센서로 비행 정보를 모으고, 지상국으로 보내고, SD카드에 남기는 로켓 프로젝트입니다.
 
-이 문서의 기능은 **구현 목표**입니다. 부품 선정과 기능 구현·검증 완료 여부는 구분해서 관리합니다.
+**저장소:** [ERUCA-Control/freshman](https://github.com/ERUCA-Control/freshman)
+
+처음 참여했다면 아래의 **처음 설정 → 내려받기 → 작업하기** 순서대로 따라오면 됩니다. 문제가 생겼을 때만 접힌 도움말을 열어보세요.
 
 ---
 
-## 1. GitHub 협업 가이드
+## 1. Git 처음 쓰기
 
-### 1.1. 먼저 알아둘 것
+우리 팀의 작업 순서는 다음과 같습니다.
 
-각자 노트북에 저장소를 복제한 뒤, **개인 작업 브랜치에서 수정 → GitHub에 업로드 → 검토 후 합치기** 순서로 작업합니다.
+**최신 파일 받기 → 내 작업 공간 만들기 → 수정해서 올리기 → 팀원 확인 후 합치기**
 
-```text
-GitHub의 main
-    │ clone / pull
-    ▼
-내 노트북의 main
-    │ 작업 브랜치 생성
-    ▼
-코드·회로도 수정 → add → commit → push
-                                  │
-                                  ▼
-                      GitHub에서 Pull Request 생성
-                                  │ 팀원 검토·병합
-                                  ▼
-                             GitHub의 main
-                                  │ 각자 pull
-                                  ▼
-                           모두의 노트북에 반영
-```
+여기서 `main`은 팀이 함께 쓰는 기준 버전이고, **브랜치**는 내 작업을 따로 진행하는 공간입니다.
 
-| 용어 | 뜻 |
-| --- | --- |
-| 저장소(repository) | 프로젝트 파일과 변경 이력을 관리하는 공간 |
-| `clone` | 저장소를 처음 내 노트북에 복제하기 |
-| `origin` | 복제한 GitHub 저장소에 Git이 기본으로 붙이는 이름 |
-| 브랜치(branch) | 다른 작업과 분리해 변경 사항을 쌓는 작업 갈래 |
-| `add` | 다음 커밋에 포함할 변경 사항을 선택하기 |
-| `commit` | 선택한 변경 사항을 **내 노트북의 Git 이력에 기록**하기 |
-| `push` | 내 커밋을 GitHub의 브랜치에 올리기 |
-| `pull` | 원격 변경을 가져와 **현재 브랜치에 반영**하기 |
-| PR(Pull Request) | 내 브랜치의 변경을 다른 브랜치에 합쳐 달라는 검토 요청 |
+### 처음 한 번: 설치와 설정
 
-**파일 저장, commit, push는 각각 별도입니다.** 편집기에서 저장했다고 GitHub에 올라가지 않으며, commit만 해도 다른 팀원의 노트북에는 전달되지 않습니다.
+1. [Git을 설치](https://git-scm.com/install/)합니다.
+2. 저장소 관리자는 참여자에게 **Write 권한**을 부여합니다. 저장소가 Public이어도 push에는 쓰기 권한이 필요합니다.
+3. Windows는 PowerShell 또는 Git Bash, macOS는 터미널을 열고 아래 명령을 입력합니다.
 
-### 1.2. 처음 한 번: Git 설치와 사용자 설정
-
-1. 각자 GitHub 계정을 준비하고, 저장소 관리자가 보낸 공동 작업자 초대를 수락합니다. 같은 저장소에 브랜치를 push할 수 있는 쓰기 권한이 필요합니다.
-2. [Git 공식 설치 안내](https://git-scm.com/install/)에 따라 Git을 설치합니다.
-3. Windows는 PowerShell 또는 Git Bash, macOS는 터미널에서 다음 명령을 실행합니다.
+이름과 이메일은 본인 것으로 바꿉니다.
 
 ```bash
 git --version
@@ -59,356 +32,280 @@ git config --global user.name "본인 이름"
 git config --global user.email "본인 GitHub 이메일"
 ```
 
-이름과 이메일은 실제 본인 정보로 바꿉니다. 공개 저장소에서 이메일 노출을 피하려면 GitHub 설정에 표시되는 본인의 `noreply` 이메일을 사용할 수 있습니다. `--global` 설정은 해당 컴퓨터의 다른 Git 저장소에도 적용됩니다. [GitHub 커밋 이메일 설정 안내](https://docs.github.com/en/account-and-profile/how-tos/email-preferences/setting-your-commit-email-address)
+이름·이메일 설정은 커밋 작성자 정보입니다. GitHub 로그인은 별도로 필요하며, 인증 화면이 뜨면 **각자 본인 계정으로 인증**합니다. [권한 안내](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization) · [인증 안내](https://docs.github.com/en/get-started/git-basics/about-remote-repositories)
 
-**이 설정은 커밋 작성자 정보이며, GitHub 로그인 설정은 별도입니다.** HTTPS 인증은 Git Credential Manager 등의 인증 도구나 개인 액세스 토큰을 사용합니다. GitHub 계정 비밀번호로 Git 작업을 인증할 수는 없습니다. 토큰을 저장소 주소나 파일에 적지 않습니다. [GitHub 인증 안내](https://docs.github.com/en/get-started/git-basics/about-remote-repositories)
+### 처음 한 번: 내 노트북에 내려받기
 
-### 1.3. 각자 노트북에 clone하기
-
-프로젝트를 둘 상위 폴더에서 실행합니다. 아래의 **`a`는 실제 GitHub 저장소의 clone 주소로 바꿔 입력**합니다. GitHub의 `Code` 메뉴에서 HTTPS 주소를 복사하면 됩니다.
+프로젝트를 보관할 상위 폴더에서 실행합니다.
 
 ```bash
-git clone a rocket-freshman-project
-cd rocket-freshman-project
-git remote -v
+git clone https://github.com/ERUCA-Control/freshman.git
+cd freshman
 git status
 ```
 
-- `rocket-freshman-project`는 내 노트북에 만들어질 폴더 이름입니다.
-- `origin` 주소가 팀 저장소인지 확인합니다.
-- **이후 Git 명령은 이 프로젝트 폴더 안에서 실행합니다.**
-- `clone`은 처음 한 번이면 됩니다. 이후 업데이트는 `pull`로 받습니다.
-- 복제한 폴더에서 다시 `git init`하거나, 그 안에 같은 저장소를 또 clone하지 않습니다.
+`freshman` 폴더가 생기면 준비 끝입니다. **이후 명령은 모두 이 폴더 안에서 실행합니다.** 이미 clone했다면 다시 받을 필요 없이 아래 작업 순서부터 시작하세요.
 
-`clone`은 원격 주소와 연결된 로컬 저장소를 만듭니다. ZIP 다운로드로 받은 폴더와는 다릅니다. [Git clone 공식 문서](https://git-scm.com/docs/git-clone)
+### 매번 작업할 때: 이 순서대로
 
-> 아래 예시는 기본 브랜치 이름이 `main`인 저장소를 기준으로 합니다. 실제 기본 브랜치가 다르면 해당 이름으로 바꿉니다. 아직 비어 있는 저장소라면 관리자가 첫 커밋과 기본 브랜치를 먼저 준비합니다.
+**① 최신 버전 받고 내 브랜치 만들기**
 
-### 1.4. 작업 시작: 최신 main에서 내 브랜치 만들기
-
-**코드나 회로도를 수정하기 전에** 아래 순서로 시작합니다.
+아직 파일을 수정하지 않은 상태에서 실행합니다. `git status`에 남아 있는 수정이 있다면 멈추고 아래의 **「수정한 파일 때문에 pull이나 브랜치 전환이 막혀요」** 도움말부터 확인하세요.
 
 ```bash
 git status
 git switch main
 git pull --ff-only origin main
-git switch -c feature/minsu-altitude
+git switch -c minsu-altitude
 ```
 
-첫 `git status`에서 미커밋 변경이 없는지 확인합니다. 변경이 있다면 현재 작업 브랜치에 먼저 커밋하거나, 아래의 임시 보관 방법으로 정리한 뒤 브랜치를 전환합니다.
+`minsu-altitude`는 예시입니다. **본인이름-작업내용**으로 바꾸고, 아래 push에서도 같은 이름을 사용하세요. 새 작업마다 새 이름을 씁니다.
 
-`feature/minsu-altitude`는 브랜치 이름 예시입니다. 본인 이름과 작업 내용에 맞춰 바꿉니다.
+**② 파일 수정하고 GitHub에 올리기**
 
-| 작업 | 브랜치 이름 예시 |
-| --- | --- |
-| 고도 데이터 처리 | `feature/minsu-altitude` |
-| LoRa 데이터 송수신 | `feature/jiyun-lora` |
-| 회로도 수정 | `hardware/seojun-schematic` |
-| SD카드 기록 오류 수정 | `fix/hana-sd-log` |
-| 문서 수정 | `docs/minsu-readme` |
-
-**새 작업은 새 브랜치에서 시작합니다.** `-c`는 브랜치를 새로 만드는 옵션이므로, 기존 작업을 이어갈 때는 `git switch feature/minsu-altitude`처럼 실행합니다.
-
-`--ff-only`는 이력이 갈라진 상태에서 임의로 병합하지 않고 멈추게 합니다. 멈췄다면 아래의 오류 대응을 확인합니다. [Git pull 공식 문서](https://git-scm.com/docs/git-pull)
-
-### 1.5. 수정한 코드·회로도를 commit하고 push하기
-
-편집기나 CAD 프로그램에서 파일을 저장한 뒤 변경 사항을 확인합니다.
+편집기에서 파일을 저장한 다음 실행합니다. 아래는 실제로 있는 `readme.md`를 수정했을 때의 예시입니다.
 
 ```bash
 git status
-git diff
-```
-
-이제 **이번 작업에 해당하는 파일만** 선택합니다. 다음 경로는 예시이므로 실제 파일 경로로 바꿉니다.
-
-코드를 수정했다면:
-
-```bash
-git add firmware/src/main.cpp
-```
-
-회로도를 수정했다면:
-
-```bash
-git add hardware/flight-computer.kicad_sch
-```
-
-위 두 예시는 필요한 쪽만 사용합니다. 관련 파일이 여러 개라면 각각 추가합니다. 삭제한 파일도 해당 경로를 `git add`하면 삭제 변경이 반영됩니다. 공백이 있는 경로는 따옴표로 감쌉니다.
-
-```bash
+git add readme.md
 git diff --staged
-git status
-git commit -m "feat: MS5611 기압 데이터 읽기 추가"
-git push -u origin feature/minsu-altitude
+git commit -m "README 설명 수정"
+git push -u origin minsu-altitude
 ```
 
-- `git diff --staged`: 이번 커밋에 들어갈 변경을 확인합니다. 바이너리 회로도 등은 CAD 프로그램에서도 직접 확인합니다.
-- `commit`: 한 커밋에는 설명 가능한 하나의 작업 단위를 담습니다. 예시 메시지도 실제 작업에 맞게 바꿉니다.
-- 첫 `push`의 브랜치 이름은 **현재 본인이 작업 중인 브랜치 이름**으로 바꿉니다. `git branch --show-current`로 확인할 수 있습니다.
-- 첫 push의 `-u`는 로컬 브랜치와 원격 브랜치의 추적 관계를 설정합니다. 이후 같은 브랜치에서는 커밋 후 `git push`만 실행해도 됩니다. [Git push 공식 문서](https://git-scm.com/docs/git-push)
-- push 성공은 업로드 성공입니다. **아직 `main`에 합쳐진 것은 아닙니다.**
+- 다른 파일을 수정했다면 `readme.md`를 **실제 파일 경로**로 바꿉니다. 여러 파일이면 각각 `git add`합니다.
+- `git diff --staged`에서 이번에 올릴 변경이 맞는지 확인합니다. 회로도·사진은 해당 프로그램에서도 직접 확인합니다.
+- 같은 브랜치에서 추가 수정할 때는 **add → commit → `git push`**를 반복합니다.
 
-처음에는 `git add .`로 폴더 전체를 올리기보다 파일을 직접 지정합니다. 임시 파일이나 개인 설정을 함께 올리는 실수를 줄일 수 있습니다.
+| 명령 | 하는 일 |
+| --- | --- |
+| `pull` | GitHub의 변경을 내 현재 브랜치에 반영 |
+| `add` | 이번에 기록할 파일 변경 선택 |
+| `commit` | 선택한 변경을 내 노트북의 Git 이력에 기록 |
+| `push` | 내 커밋을 GitHub에 업로드 |
 
-### 1.6. PR로 검토받고 main에 합치기
+**편집기에서 저장하는 것, commit하는 것, push하는 것은 각각 별도입니다.**
 
-1. GitHub 저장소에서 `Compare & pull request`를 선택합니다. 배너가 없다면 `Pull requests` → `New pull request`를 엽니다.
-2. **base는 `main`, compare는 본인 작업 브랜치**인지 확인합니다.
-3. 무엇을 왜 바꿨는지, 무엇을 확인했는지 적습니다.
-4. 다른 팀원 최소 1명의 검토를 받는 것을 기본 규칙으로 삼고, 검토 후 병합합니다. 실제 GitHub 보호 규칙은 저장소 관리자가 별도로 설정해야 합니다.
+**③ GitHub에서 팀원에게 확인받기**
 
-PR 설명 예시:
+1. 저장소에서 `Compare & pull request`를 누릅니다. 안 보이면 `Pull requests` → `New pull request`로 들어갑니다.
+2. **base: `main` / compare: 내 브랜치**인지 확인합니다.
+3. **무엇을 바꿨는지 / 무엇을 확인했는지 / 아직 확인하지 못한 것**을 적습니다.
+4. 팀원 한 명 이상이 검토한 뒤 병합합니다. 이 요청을 **PR(Pull Request)**이라고 합니다.
 
-```markdown
-## 변경 내용
-- MS5611 기압 데이터 읽기 추가
-- 센서 응답 실패 시 오류 메시지 표시
+push는 내 브랜치를 올리는 단계이고, PR 병합은 그 변경을 팀의 `main`에 합치는 단계입니다. [PR 안내](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request)
 
-## 확인 내용
-- 사용 보드 / 개발 환경:
-- 확인한 동작과 결과:
-- 아직 확인하지 못한 항목:
+**④ 합쳐진 결과 받기**
 
-## 관련 변경
-- 핀맵 / 배선 변경 여부:
-- 회로도 / 통신 형식 / 문서 변경 여부:
-```
-
-확인하지 않은 내용을 완료로 적지 않습니다. 회로도 변경 PR에는 변경 이유와 검토용 이미지 또는 PDF를 함께 제시하면 검토하기 좋습니다. [GitHub PR 생성 안내](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request)
-
-PR이 병합되면 각자 아래 명령으로 최신 결과를 받습니다. 실행 전 미커밋 변경을 먼저 정리합니다.
+PR이 병합되고, 내 작업 폴더에 미커밋 변경이 없는 상태에서 실행합니다.
 
 ```bash
 git switch main
 git pull --ff-only origin main
 ```
 
-다음 작업은 이 상태에서 새 브랜치를 만듭니다. **병합이 끝난 작업 브랜치는 재사용하지 않습니다.**
+다음 작업은 다시 ①부터 시작합니다. 병합이 끝난 브랜치는 재사용하지 않습니다.
 
-### 1.7. 작업 중 다른 팀원의 변경 가져오기
+> **하나라도 오류가 나오면 다음 명령으로 넘어가지 말고 멈추세요.** 아래 도움말을 확인하거나 오류 문구를 팀원에게 공유하면 됩니다.
 
-**최신 `main`을 내 작업 브랜치에 반영할 때**는 다음 순서를 사용합니다. 현재 수정 사항을 먼저 커밋해 작업 폴더를 깨끗하게 만듭니다.
+### 꼭 지킬 약속
+
+- **`main`에서 직접 수정·push하지 않고, 내 작업 브랜치를 사용합니다.**
+- 같은 회로도·PCB 파일은 한 번에 한 명이 편집하고, 시작·종료를 공유합니다.
+- 처음에는 `git add .` 대신 **파일을 지정해서** 추가합니다.
+- 토큰·비밀번호, 빌드 결과, 개인 설정, 불필요한 대용량 파일은 올리지 않습니다.
+- `--force`, `reset --hard`, `clean -fd`는 뜻을 모른 채 실행하지 않습니다.
+- 코드에서 핀을 바꾸면 회로도·배선 설명도 함께 업데이트합니다.
+
+### 막혔을 때만 열어보기
+
+<details>
+<summary><strong>기존 브랜치에서 작업을 이어가고 싶어요</strong></summary>
+
+작업 폴더에 미커밋 변경이 없는 상태에서 실행합니다. 브랜치 이름은 본인 것으로 바꿉니다.
 
 ```bash
-git switch feature/minsu-altitude
-git status
+git switch minsu-altitude
+git pull --ff-only
+```
+
+위 pull은 첫 push로 연결한 **같은 이름의 원격 작업 브랜치**를 받습니다. 아직 push하지 않았다면 pull은 생략합니다. 팀의 최신 `main`까지 내 작업에 반영하려면 현재 수정을 먼저 커밋하고 실행합니다.
+
+```bash
 git fetch origin
 git merge --no-edit origin/main
 ```
 
-충돌 없이 병합됐다면 코드·회로도를 확인하고 `git push`합니다. 충돌이 발생했다면 아래 절차로 해결한 뒤 push합니다.
+확인 후 `git push`합니다. 충돌이 나면 아래 도움말을 확인합니다. [pull](https://git-scm.com/docs/git-pull) · [merge](https://git-scm.com/docs/git-merge)
 
-**작업 브랜치에서 `git pull`만 한다고 최신 `main`이 들어오는 것은 아닙니다.** 첫 push에서 연결한 같은 이름의 원격 작업 브랜치를 가져오는 동작과, `origin/main`을 병합하는 동작을 구분합니다.
+</details>
 
-반대로 **같은 작업 브랜치의 원격 변경을 받을 때**는 해당 브랜치에서 `git pull --ff-only`를 실행합니다. 개인별 브랜치를 사용하면 같은 브랜치에서 여러 사람이 서로 push하는 상황을 줄일 수 있습니다. [Git pull](https://git-scm.com/docs/git-pull) · [Git merge](https://git-scm.com/docs/git-merge)
+<details>
+<summary><strong>수정한 파일 때문에 pull이나 브랜치 전환이 막혀요</strong></summary>
 
-### 1.8. 자주 생기는 꼬임과 해결 방법
+`git status`로 현재 브랜치와 수정 파일을 확인합니다.
 
-#### A. pull 또는 브랜치 전환이 로컬 수정 때문에 막힌다
-
-먼저 `git status`와 `git diff`를 확인합니다. 남길 작업은 현재 작업 브랜치에 커밋합니다. 아직 커밋하기 어렵다면 잠시 보관할 수 있습니다.
-
-```bash
-git stash push -u -m "임시 보관: 진행 중 작업"
-git stash list
-```
-
-필요한 pull 등을 마친 뒤 **원래 작업 브랜치로 돌아와**, 목록에서 방금 보관한 항목을 확인하고 복원합니다. 다음 예시는 가장 최근 항목을 복원합니다.
+- **이미 내 작업 브랜치라면:** 남길 변경을 add·commit한 뒤 pull이나 브랜치 전환을 진행합니다.
+- **`main`에서 먼저 수정했다면:** 아직 사용하지 않은 이름으로 작업 브랜치를 만들고, 그 브랜치에서 add·commit합니다.
 
 ```bash
-git stash apply 'stash@{0}'
-git status
+git switch -c minsu-mywork
 ```
 
-`-u`는 아직 Git이 추적하지 않는 새 파일도 보관하지만, `.gitignore`로 제외된 파일까지 보관하지는 않습니다. `apply`는 보관 항목을 남겨 두며, 복원 과정에서도 충돌이 생길 수 있습니다. 복원 결과를 확인하고 커밋한 뒤에만 해당 항목을 `git stash drop 'stash@{0}'`으로 지웁니다. 그동안 다른 stash를 만들었다면 번호를 다시 확인합니다. **stash는 GitHub에 올라가는 백업이 아닙니다.** [Git stash 공식 문서](https://git-scm.com/docs/git-stash)
+이름은 본인 작업에 맞게 바꿉니다. 아직 커밋하기 어렵거나 어느 브랜치의 작업인지 모르겠다면, 파일을 지우거나 복제 폴더를 새로 받기 전에 팀원과 확인하세요.
 
-#### B. push가 rejected / non-fast-forward로 거절된다
+</details>
 
-원격의 **같은 브랜치**에 내 로컬에 없는 커밋이 있을 수 있습니다. 현재 작업을 커밋한 상태에서, 해당 작업 브랜치에 머문 채 실행합니다.
+<details>
+<summary><strong>push가 거절되거나 pull --ff-only가 실패해요</strong></summary>
+
+- **권한 오류:** 본인 계정으로 인증했는지, 저장소 Write 권한이 있는지 확인합니다. 브랜치 보호 규칙에 걸렸다면 PR을 사용합니다.
+- **작업 브랜치 push가 non-fast-forward로 거절됨:** 원격의 같은 브랜치에 다른 커밋이 있을 수 있습니다. 현재 수정을 커밋한 뒤, 해당 작업 브랜치에서 아래를 실행합니다.
 
 ```bash
 git fetch origin
-git merge --no-edit origin/feature/minsu-altitude
+git merge --no-edit origin/minsu-altitude
 ```
 
-원격 브랜치 이름은 본인 브랜치에 맞게 바꿉니다. 병합 또는 충돌 해결을 마치고 결과를 확인한 뒤 `git push`합니다. **거절됐다고 `git push --force`로 덮어쓰지 않습니다.**
+이름을 본인 브랜치에 맞게 바꾸고, 병합·확인을 마친 뒤 다시 `git push`합니다.
 
-권한 부족이나 보호 브랜치 규칙으로 거절된 경우에는 병합으로 해결되지 않습니다. 오류 문구와 저장소 권한을 확인합니다.
+- **`main`에서 `pull --ff-only` 실패:** 로컬과 원격 이력이 갈라졌을 수 있습니다. `git status`를 확인하고 통합 담당자와 정리합니다. 강제 push나 파일 삭제로 해결하지 않습니다. [pull 안내](https://git-scm.com/docs/git-pull)
 
-#### C. merge conflict가 발생한다
+</details>
 
-충돌은 Git이 어느 변경을 남길지 자동으로 결정하지 못했다는 뜻입니다. 먼저 `git status`로 충돌 파일을 확인합니다. 텍스트 파일에는 보통 다음 표시가 생깁니다.
+<details>
+<summary><strong>merge conflict라고 나와요</strong></summary>
 
-```text
-<<<<<<< HEAD
-현재 내 브랜치의 내용
-=======
-가져와 병합하려는 브랜치의 내용
->>>>>>> origin/main
-```
+같은 부분의 변경을 Git이 자동으로 합치지 못한 상태입니다.
 
-1. 양쪽 변경 이유를 확인하고, 필요하면 해당 팀원과 함께 최종 내용을 정합니다.
-2. 필요한 내용을 반영하고 `<<<<<<<`, `=======`, `>>>>>>>` 표시를 모두 제거합니다.
-3. 코드라면 빌드·동작을 확인하고, 회로도라면 CAD 프로그램에서 열어 확인합니다.
-4. 해결한 파일을 지정해 추가한 뒤 병합 커밋을 완성합니다.
+1. `git status`로 충돌 파일을 확인합니다.
+2. 수정한 팀원과 최종 내용을 정합니다. 텍스트 파일의 `<<<<<<<`, `=======`, `>>>>>>>` 표시는 최종 내용으로 정리하며 제거합니다.
+3. 코드·회로도를 직접 확인한 뒤, 해결한 파일을 `git add`합니다.
+4. `git commit -m "병합 충돌 해결"` 후 `git push`합니다.
 
-```bash
-git add firmware/src/main.cpp
-git commit -m "merge: 고도 처리 변경 충돌 해결"
-git push
-```
+한쪽 내용을 무조건 선택하면 다른 사람의 작업을 잃을 수 있습니다. 회로도·PCB는 담당자와 CAD에서 내용을 확인하세요. 작업 폴더가 깨끗한 상태에서 시작한 `git merge`를 중단하려면 `git merge --abort`를 사용할 수 있습니다. [충돌 해결 안내](https://git-scm.com/docs/git-merge)
 
-경로와 메시지는 실제 해결한 내용으로 바꿉니다. **`Accept Current`나 `Accept Incoming`을 무조건 누르면 한쪽 작업을 잃을 수 있습니다.**
+</details>
 
-이 문서의 `git merge` 도중 발생한 충돌을 해결하기 어렵다면, 작업 폴더가 깨끗했던 상태에서 병합을 시작했는지 확인하고 `git merge --abort`로 해당 병합을 중단할 수 있습니다. 이 명령은 `stash apply` 충돌을 취소하는 명령이 아닙니다. [Git 충돌 해결·병합 중단 안내](https://git-scm.com/docs/git-merge)
+<details>
+<summary><strong>다른 파일까지 add했거나, 인증 설정이 궁금해요</strong></summary>
 
-#### D. main에서 pull --ff-only가 실패한다
+- **add 취소:** `git restore --staged readme.md`처럼 실행하면 해당 파일을 커밋 대상에서만 뺍니다. 수정 내용은 남습니다. `--staged` 없는 restore와 구분하세요. [restore 안내](https://git-scm.com/docs/git-restore)
+- **이메일 공개 범위:** 본인 GitHub 설정의 `noreply` 이메일을 사용할 수 있습니다. `--global` 이름·이메일 설정은 이 컴퓨터의 다른 저장소에도 적용됩니다. [이메일 안내](https://docs.github.com/en/account-and-profile/how-tos/email-preferences/setting-your-commit-email-address)
+- **HTTPS 인증:** 계정 비밀번호 대신 인증 도구나 개인 액세스 토큰을 사용합니다. 토큰을 코드나 저장소 URL에 적지 않습니다. [인증 안내](https://docs.github.com/en/get-started/git-basics/about-remote-repositories)
+- **제외할 파일:** `.gitignore`로 정하되, 이미 Git이 추적 중인 파일은 자동으로 제외되지 않습니다. 인증 정보가 올라갔다면 해당 정보를 폐기·재발급하고 관리자와 정리합니다. [ignore 안내](https://git-scm.com/docs/gitignore) · [민감 정보 처리](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
 
-로컬 `main`에만 있는 커밋이 생기는 등 양쪽 이력이 갈라졌을 수 있습니다. 먼저 아래 명령으로 차이를 확인하고 팀원과 정리합니다.
+</details>
 
-```bash
-git fetch origin
-git status
-git log --oneline --graph --decorate --all -15
-```
+---
 
-소중한 로컬 커밋을 덮어쓸 수 있으므로, 인터넷에서 찾은 `reset --hard` 명령을 바로 실행하지 않습니다. 평소 `main`에서 직접 작업하지 않으면 이런 상황을 줄일 수 있습니다.
+## 2. 만들 기능
 
-#### E. 실수로 다른 파일까지 add했다
+아래는 **구현 목표**입니다. 부품을 골랐다는 것과 기능 구현·검증이 끝났다는 것은 구분합니다.
 
-커밋 전이라면 해당 파일의 선택만 해제할 수 있습니다.
-
-```bash
-git restore --staged readme.md
-```
-
-이 명령은 **커밋 대상에서만 빼며, 파일의 수정 내용은 남깁니다.** `--staged` 없는 `git restore 파일경로`는 커밋하지 않은 수정을 버릴 수 있으므로 구분합니다. [Git restore 공식 문서](https://git-scm.com/docs/git-restore)
-
-### 1.9. 회로도·PCB 파일을 함께 수정할 때
-
-**Git이 파일을 관리해 준다고 회로의 의미까지 검토해 주지는 않습니다.**
-
-- **같은 회로도·PCB 파일은 가능하면 한 번에 한 명이 편집합니다.** 작업 시작과 종료를 팀에 공유합니다. 브랜치가 달라도 같은 파일 수정은 나중에 충돌할 수 있습니다.
-- 작업 전에 최신 변경을 받고, 사용 중인 CAD 프로그램과 버전을 맞춥니다. 다른 버전에서 저장하며 생기는 대규모 형식 변경을 피합니다.
-- 회로도·PCB 원본과 필요한 프로젝트 파일, 사용자 심벌·풋프린트 라이브러리를 함께 관리합니다. PDF나 캡처 이미지만으로 원본을 대체하지 않습니다.
-- KiCad처럼 텍스트 형식인 파일도 줄 단위 병합이 성공했다고 정상 회로라고 단정하지 않습니다. 바이너리 파일은 텍스트 충돌 표시 없이 병합이 막힐 수도 있습니다.
-- 충돌이 나면 담당자끼리 기준 파일을 정하고 필요한 변경을 CAD에서 다시 반영합니다. 구조를 모른 채 파일 내부를 임의로 고치지 않습니다.
-- 병합 후 CAD에서 직접 열어 배선·넷 이름·부품·라이브러리 연결을 확인하고, 해당 도구의 전기적 규칙 검사(ERC)·설계 규칙 검사(DRC) 결과를 검토합니다.
-- 핀맵이 바뀌면 펌웨어와 배선 문서도 함께 바꿉니다. 회로도 변경과 코드 변경의 관계를 PR에 적습니다.
-
-### 1.10. 팀 공통 Git 규칙
-
-| 지킬 것 | 이유 |
+| 기능 | 내용 |
 | --- | --- |
-| 작업 시작 전 `status`, 최신 변경 확인 | 잘못된 브랜치나 오래된 파일에서 작업하는 실수 예방 |
-| `main` 직접 push 대신 작업 브랜치와 PR 사용 | 공유 기준 버전에 검토된 변경을 반영 |
-| 한 커밋에는 하나의 작업 단위 | 검토와 문제 추적을 쉽게 함 |
-| 커밋 메시지에 변경 내용을 구체적으로 작성 | `수정`, `최종`, `진짜최종` 같은 메시지로 생기는 혼란 예방 |
-| 토큰·비밀번호·개인 인증 파일 제외 | 저장소 이력에 인증 정보가 남는 문제 예방 |
-| 빌드 결과·캐시·CAD 및 편집기의 임시 잠금 파일·개인 설정은 `.gitignore` 검토 | 불필요한 파일과 충돌 감소 |
-| 필요한 공통 설정과 라이브러리 버전은 공유 | 다른 노트북에서도 프로젝트를 재현할 수 있게 함 |
-| 대용량 원본 로그·영상은 업로드 전 관리 방식 합의 | 저장소가 과도하게 커지는 문제 예방 |
-| 강제 push, `reset --hard`, `clean -fd`를 모르고 실행하지 않기 | 커밋이나 로컬 파일을 잃는 실수 예방 |
-| `.git` 폴더를 삭제하거나 수동 편집하지 않기 | Git 이력과 저장소 연결 보존 |
-| 공유 동기화 폴더 하나를 여러 명이 편집하지 않기 | 각자 로컬 저장소를 두고 Git으로 변경을 주고받기 |
+| 로켓 점화 | 니크롬선 가열 방식의 이그나이터 장치 제작 예정 |
+| 낙하산 사출 | 로켓 회수를 위한 낙하산 사출 기능 |
+| 실시간 고도 계산 | MS5611의 기압을 이용해 기준 지점 대비 고도 계산 |
+| GPS 실시간 위치 정보 전송 | GPS 위치와 위치 정보의 유효 여부 전달 |
+| 지상국 실시간 통신 | LoRa로 비행 정보와 장치 상태 전송 |
+| SD카드 실시간 기록 | 센서 정보와 장치 상태를 시간 정보와 함께 저장 |
 
-의존성 버전을 고정하는 `package-lock.json` 같은 lockfile은 임시 잠금 파일과 다릅니다. 사용하는 개발 도구의 지침에 따라 저장소에 포함할지 정합니다.
+센서 수집·무선 전송·SD 저장 주기와 데이터 형식은 별도로 정합니다. 기압 기반 고도와 GPS 고도도 구분해 기록합니다.
 
-`.gitignore`는 **이미 추적 중인 파일을 자동으로 이력에서 지우지 않습니다.** [Git ignore 공식 문서](https://git-scm.com/docs/gitignore)
+## 3. 사용할 부품
 
-인증 정보가 올라갔다면 파일 삭제 커밋만으로 끝내지 말고, 해당 인증 정보를 즉시 폐기·재발급합니다. 이력 정리가 필요한지도 저장소 관리자와 검토합니다. [GitHub 민감 정보 제거 안내](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
-
-커밋 메시지 예시:
-
-```text
-feat: MS5611 기압 데이터 읽기 추가
-fix: SD카드 기록 실패 시 오류 처리 수정
-hardware: 센서 커넥터 핀 표기 수정
-docs: 지상국 통신 데이터 항목 정리
-```
-
----
-
-## 2. 구현 목표
-
-| 번호 | 기능 | 목표 |
+| 구분 | 부품·모듈 | 역할 |
 | --- | --- | --- |
-| 1 | **로켓 점화** | 점화 기능을 구현하고 동작 상태를 확인 |
-| 2 | **낙하산 사출** | 회수에 필요한 낙하산 사출 기능 구현 |
-| 3 | **실시간 고도 계산** | MS5611의 기압 데이터를 바탕으로 고도를 추정하고 기준 지점 대비 변화 기록 |
-| 4 | **GPS 센서를 통한 실시간 위치 정보 전송** | GPS에서 얻은 위치와 위치 정보의 유효 여부를 지상국에 전달 |
-| 5 | **지상국과의 실시간 통신을 통한 정보 전송** | LoRa를 이용해 비행 정보와 장치 상태를 지상국에 전달 |
-| 6 | **SD카드에 실시간 정보 기록** | 수집한 센서 정보와 주요 상태를 시간 정보와 함께 저장 |
+| MCU | **ESP32-WROOM-32-E** | 센서 정보 처리와 통신·기록 제어 |
+| IMU | **WT901** | 가속도·각속도·자세 정보 수집 |
+| 고도 센서 | **MS5611** | 기압·온도 측정, 기압 기반 고도 계산 |
+| SD카드 모듈 | **별도 모듈명 없음** | 데이터 저장 |
+| LoRa | **RYLR890** | 무선 송수신 |
+| 릴레이 | **SRD-05VDC-SL-C** | 외부 회로 스위칭 |
 
-**실시간 처리의 구체적인 수집·전송·저장 주기는 별도로 확정해 기록합니다.** 센서 응답 속도, 통신량, 기록 지연을 확인한 뒤 기능별 주기를 정합니다. 센서를 읽는 주기와 무선으로 보내는 주기는 서로 다르게 설계할 수 있습니다.
+**GPS 센서 모델은 미정입니다.** 실제 개발 보드, 핀 배정, 전원 구성, 지상국 구성도 추가로 정리합니다.
 
-MS5611은 기압 센서이므로 고도는 측정 기압을 이용해 계산하는 값입니다. 기준 기압과 보정 방법을 정하고, 기압 기반 고도와 GPS 고도는 구분해 기록합니다. [MS5611 제조사 자료](https://www.te.com/en/product-MS561101BA03-50.html)
+<details>
+<summary><strong>부품 자료를 볼 때 확인할 것</strong></summary>
 
-### 정보 수집·전송·기록 흐름
+- ESP32 모듈의 제조사 표기는 `ESP32-WROOM-32E`입니다. 모듈과 개발 보드를 구분하고 실제 보드 핀맵을 확인합니다. [Espressif 자료](https://documentation.espressif.com/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.html)
+- WT901의 세부 모델과 제공 인터페이스를 확인합니다. [WitMotion 자료](https://wit-motion.com/index.php/Module/84.html)
+- MS5611은 기압을 측정하고, 그 값으로 고도를 계산합니다. [TE Connectivity 자료](https://www.te.com/en/product-MS561101BA03-50.html)
+- **RYLR890은 SPI 방식입니다.** 다른 모델의 UART AT 명령 예제를 그대로 적용하지 않습니다. [RYLR890 자료](https://reyax.com/upload/products_download/download_file/RYLR890_EN.pdf)
+- 릴레이 부품명만으로 보드 전체의 입력 조건을 정하지 않습니다. SD카드 모듈도 실물의 핀 표기와 제품 자료를 확인합니다.
 
-```text
-WT901 ──────┐
-            │
-MS5611 ─────┼──▶ ESP32-WROOM-32-E ──┬──▶ SD카드 기록
-            │                     │
-GPS [미정] ─┘                     └──▶ RYLR890 ~~ 무선 ~~ 지상국 수신 장치
-```
-
-위 그림은 **센서 정보의 흐름**입니다. 지상국에는 호환되는 무선 수신 장치와 데이터를 확인할 프로그램이 필요하며, 구체적인 지상국 구성은 추가로 결정합니다.
-
-점화·사출 기능의 상세 구성과 시험 절차는 별도 설계 문서에서 관리합니다. 개발 중 기능 확인에는 LED 등 비작동 시험 부하를 우선 사용합니다.
+</details>
 
 ---
 
-## 3. 현재 결정된 하드웨어
+## 4. 파일은 어디에 넣나요?
 
-| 구분 | 선정 부품·모듈 | 프로젝트 내 역할 |
-| --- | --- | --- |
-| **MCU** | **ESP32-WROOM-32-E** | 센서 데이터 수집, 처리, 통신, 기록을 담당하는 제어부 |
-| **IMU** | **WT901** | 가속도·각속도·자세 관련 정보 수집 |
-| **고도 센서** | **MS5611** | 기압·온도 측정 및 기압 기반 고도 계산에 활용 |
-| **SD카드 모듈** | **별도 모듈명 없음** | 센서 데이터와 상태 기록 저장 |
-| **LoRa** | **RYLR890** | 로켓과 지상국 사이의 무선 데이터 송수신 |
-| **릴레이** | **SRD-05VDC-SL-C** | 외부 회로의 전기적 스위칭에 사용하는 부품 |
-
-**GPS 센서는 기능에 포함되지만, 현재 모델은 미정입니다.** 개발 프레임워크, GPIO 배정, 전원 구성, 통신 규격, 지상국 구성 역시 별도로 결정해 문서화합니다.
-
-### 부품을 연결하기 전에 확인할 점
-
-- **ESP32:** `ESP32-WROOM-32-E`는 제조사 문서에서 `ESP32-WROOM-32E`로 표기됩니다. 이 모듈과 모듈이 실장된 개발 보드는 구분합니다. 사용할 실제 보드의 전원 입력과 핀맵을 확인합니다. [Espressif 데이터시트](https://documentation.espressif.com/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.html)
-- **WT901:** 실제 보유 제품의 세부 모델과 제공 인터페이스를 확인한 뒤 통신 방식과 데이터 형식을 정합니다. [WitMotion 제품 자료](https://wit-motion.com/index.php/Module/84.html)
-- **MS5611:** 센서 칩 사양과 판매 모듈의 전원·레벨 변환 회로는 구분합니다. 실제 모듈의 회로와 인터페이스를 확인합니다. [TE Connectivity 제품 자료](https://www.te.com/en/product-MS561101BA03-50.html)
-- **RYLR890:** 제조사 핀 정의는 **SPI 인터페이스**를 사용합니다. UART AT 명령 기반인 다른 REYAX 모델의 예제를 그대로 적용하지 않습니다. [RYLR890 공식 데이터시트](https://reyax.com/upload/products_download/download_file/RYLR890_EN.pdf)
-- **릴레이:** `SRD-05VDC-SL-C`라는 부품명만으로 릴레이 보드 전체의 입력 전압·동작 극성·구동 회로를 확정하지 않습니다. 실제 보유한 부품 또는 보드의 자료를 기준으로 확인합니다.
-- **SD카드 모듈:** 모델명이 없으므로 제품 사진·핀 표기·가능하면 회로 자료를 남기고, 지원 전원과 신호 전압, 통신 방식을 확인합니다.
-
-### 다음으로 합의할 항목
-
-- [ ] 실제 ESP32 개발 보드와 개발 환경·라이브러리 버전
-- [ ] GPS 센서 모델과 지상국 수신 장치
-- [ ] 센서·SD카드·LoRa의 인터페이스와 GPIO 핀맵
-- [ ] 전원 구성과 부품별 전압 호환성
-- [ ] 기준 기압 설정, 고도 계산과 보정 방법
-- [ ] 센서 수집·무선 전송·SD카드 저장 주기
-- [ ] 통신 패킷과 SD카드 로그 형식, 시간 기준과 단위
-- [ ] 센서 응답 실패·GPS 위치 미확정·통신 끊김·저장 실패의 표시 방법
-- [ ] 점화·사출 기능의 별도 설계·검토·시험 절차
-
----
-
-## 4. 권장 저장소 구성
-
-아래는 **앞으로 정리할 폴더 구조 예시**입니다. 현재 파일이나 구현이 존재한다는 의미는 아닙니다. 팀이 실제 개발 도구를 정하면 맞춰 조정합니다.
+**코드는 `code`, 회로도는 `circuits`, 실제 사진은 `photos`에 넣습니다.** 아래는 앞으로 사용할 구성 예시이며, 필요한 폴더부터 만듭니다.
 
 ```text
-rocket-freshman-project/
-├── readme.md        # 프로젝트 소개와 협업 가이드
-├── firmware/        # ESP32 펌웨어와 공통 빌드 설정
-├── hardware/        # 회로도·PCB 원본과 필요한 라이브러리
-├── ground-station/  # 지상국 수신·표시 프로그램
-├── docs/            # 핀맵, 데이터 형식, 개발 환경, 시험 절차
-└── experiments/     # 재현 가능한 실험 기록과 소규모 예제 데이터
+freshman/
+├── readme.md
+├── LICENSE
+├── code/                     # 코드
+│   ├── rocket/               # 로켓 탑재부 코드
+│   │   ├── main.cpp          # 전체 실행 순서와 모듈 연결
+│   │   ├── common/           # pins.h, data_types.h 등 공통 약속
+│   │   ├── sensors/          # MS5611, WT901, GPS 모듈
+│   │   ├── radio/            # LoRa 송수신
+│   │   ├── sd-card/          # SD카드 기록
+│   │   └── outputs/          # 출력 기능 모듈
+│   ├── ground/               # 지상국 코드
+│   └── examples/             # 부품별 독립 실행 예제
+├── circuits/                 # 회로도·PCB 원본
+│   ├── rocket/               # 탑재부 CAD 프로젝트
+│   ├── ground/               # 지상부 CAD 프로젝트
+│   └── pdf/                  # 검토용 회로도 PDF
+├── photos/                   # 실제 부품·제작 사진
+│   ├── parts/                # 보유 부품 앞·뒷면
+│   ├── wiring/               # 배선과 커넥터
+│   ├── assembly/             # 조립 상태
+│   └── tests/                # 시험 장면
+├── docs/                     # 설명 문서
+│   ├── setup.md              # 개발 환경과 실행 방법
+│   ├── wiring.md             # 핀맵과 배선 설명
+│   └── data-format.md        # 통신·저장 데이터 규격
+└── test-records/              # 날짜별 실험 기록과 소규모 로그
 ```
 
-실험 기록에는 **사용한 하드웨어, 코드 커밋, 시험 조건, 관찰 결과, 미확인 사항**을 남깁니다. 코드와 회로도를 바꾸고 나면, 다른 팀원이 같은 조건에서 확인할 수 있도록 관련 문서도 함께 업데이트합니다.
+파일명과 빌드 설정은 개발 도구를 정한 뒤 맞춥니다. 각 보드에 올릴 코드는 별도 빌드 프로젝트로 두고, 지상국에서도 MCU를 사용하면 그 펌웨어와 PC 프로그램을 구분합니다. `examples`의 시험 코드는 본 프로젝트와 별도로 실행할 수 있게 둡니다.
+
+### 담당은 이렇게 나눕니다
+
+| 역할 | 맡을 영역 |
+| --- | --- |
+| 통합 담당 | `main.cpp`, 공통 데이터 구조, 빌드 설정 |
+| 센서 담당 | `sensors` 안의 센서별 코드 |
+| 통신·지상국 담당 | `radio`, `ground` |
+| 기록 담당 | `sd-card`, 저장 로그 형식 |
+| 출력 기능 담당 | `outputs`, 관련 설계·시험 기록 |
+| 회로·제작 담당 | `circuits`, 배선 문서와 실물 사진 |
+
+인원에 따라 한 사람이 여러 역할을 맡아도 됩니다. 센서 담당은 센서별로 나눌 수 있습니다.
+
+- **`main.cpp`와 공통 파일을 바꿀 때는 통합 담당자와 먼저 맞춥니다.** 핀 배정은 회로 담당자와도 함께 확인합니다.
+- 센서 코드는 정해진 측정 데이터를 전달하고, 통신·SD 코드는 각각 전송·저장 형식으로 바꿉니다.
+- 데이터의 이름·단위·시간 기준·유효 여부를 먼저 맞춰 `data_types.h`와 `data-format.md`에 기록합니다.
+- 회로도는 CAD 프로젝트 원본과 필요한 라이브러리를 함께 보관합니다. PDF는 검토용입니다. 병합 후 CAD에서 직접 열어 확인합니다.
+
+### 사진과 실험 기록은 이렇게 남깁니다
+
+사진 이름에는 **날짜 + 대상·제작 버전 + 촬영 내용**을 넣습니다.
+
+```text
+2026-11-12_ms5611_front.jpg
+2026-11-12_rocket-r01_wiring-top.jpg
+2026-11-12_rocket-r01_assembly-side.jpg
+```
+
+관련 문서에는 사진 속 부품·보드 버전과 확인할 부분을 적고 사진을 연결합니다. 사진은 필요한 장면을 읽기 좋은 용량으로 올리고, 대량의 원본 사진·영상·전체 로그는 외부 보관 위치를 문서에 연결합니다.
+
+실험은 `test-records/2026-11-12_ms5611/`처럼 날짜와 내용으로 나눕니다. 각 실험의 `notes.md`에는 **사용 부품·보드 버전 / 코드 커밋 / 시험 조건 / 관찰 결과 / 미확인 사항**을 적고, 필요한 소규모 로그를 함께 둡니다.
+
+예를 들어 센서 연결 핀이 바뀌었다면 **코드의 핀맵, 회로도, 배선 설명, 배선 사진을 같은 PR에서 함께 갱신**합니다.
